@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>个人引导页</title>
+  <style>
+    :root {
+      --main: #4FC3F7;
+      --bg: #F5FAFF;
+      --card-bg: #FFFFFF;
+      --shadow: 0 6px 24px #91AAC04D;
+      --border: #E3EFFA;
+    }
+    html, body { background:var(--bg); color:#222; font-family:'Inter','Segoe UI',Arial,sans-serif; margin:0; min-height:100vh; }
+    body { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .card {
+      background:#FFFFFFEE;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:38px 22px 22px;
+      max-width:400px;
+      width:100%;
+      text-align:center;
+      margin:44px auto 0;
+      border:1px solid #E3EFFA;
+      animation:fadein .4s;
+    }
+    @keyframes fadein { from{opacity:.5;transform:scale(.98)} to{opacity:1;transform:scale(1)} }
+    .avatar {
+      width:92px;height:92px;border-radius:50%;margin-bottom:16px;border:3px solid var(--main);background:#fff;object-fit:cover;
+      box-shadow:0 0 14px #4FC3F740;transition:border-color .25s,box-shadow .22s;animation:pop .45s;
+    }
+    @keyframes pop { from{transform:scale(.86)} to{transform:scale(1)} }
+    .name {
+      font-size:1.35rem;font-weight:700;margin-bottom:7px;color:#2071A9;letter-spacing:.5px;text-shadow:0 1px 7px #55C8FF30;
+      transition:color .2s;
+    }
+    .desc {
+      font-size:1.05rem;color:#7BA6CC;margin-bottom:17px;line-height:1.5;
+    }
+    .links {
+      display:flex;flex-direction:column;gap:12px;margin-top:15px;animation:fadein .36s;
+    }
+    .link-btn {
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      background:linear-gradient(96deg,#4FC3F7 0%,#2979FF 100%);
+      color:#fff;border:none;outline:none;border-radius:8px;font-size:1.02rem;font-weight:500;
+      padding:9px 0;box-shadow:0 2px 8px #4FC3F750;text-decoration:none;cursor:pointer;opacity:.96;letter-spacing:.3px;
+      transition:background .18s,box-shadow .18s,transform .13s;
+    }
+    .link-btn:hover,.link-btn:focus{
+      background:linear-gradient(90deg,#7BDBFF 0%,#2979FF 90%);
+      box-shadow:0 6px 22px #2979FF55;
+      transform:scale(1.04);
+      opacity:1;
+    }
+    .icon{
+      width:22px;height:22px;filter:drop-shadow(0 1px 6px #009BB830);border-radius:3px;background:#fff;transition:box-shadow .2s;
+    }
+    @media (max-width:540px){
+      .card{padding:16px 6px;margin-top:18px;}
+      .avatar{width:62px;height:62px;}
+      .name{font-size:1.08rem;}
+      .desc{font-size:0.92rem;}
+      .links{gap:8px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="https://avatars.githubusercontent.com/u/583231" alt="头像" class="avatar"/>
+    <div class="name">你的昵称</div>
+    <div class="desc">这是你的简介，可以介绍自己、兴趣、职业等</div>
+    <div class="links">
+      <a class="link-btn" href="https://qq.com/" target="_blank">
+        <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tencentqq.svg" alt="QQ" />
+        QQ好友
+      </a>
+      <a class="link-btn" href="https://bilibili.com/" target="_blank">
+        <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bilibili.svg" alt="B站" />
+        B站主页
+      </a>
+      <a class="link-btn" href="https://weibo.com/" target="_blank">
+        <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/sinaweibo.svg" alt="微博" />
+        微博
+      </a>
+      <a class="link-btn" href="https://wx.com/" target="_blank">
+        <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/wechat.svg" alt="微信" />
+        微信
+      </a>
+      <!-- 更多链接可用后台管理生成 -->
+    </div>
+  </div>
+</body>
+</html>

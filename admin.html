@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>个人引导页管理后台</title>
+  <style>
+    :root {
+      --main: #4FC3F7;
+      --bg: #F5FAFF;
+      --card-bg: #FFFFFF;
+      --shadow: 0 6px 24px #91AAC04D;
+      --border: #E3EFFA;
+    }
+    html, body {
+      background: var(--bg);
+      color: #333;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .main {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 38px 0 20px;
+    }
+    .panel {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 34px 20px;
+      min-width: 320px;
+      max-width: 400px;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+      transition: box-shadow .22s;
+    }
+    label {
+      margin-top: 22px;
+      display: block;
+      font-weight: 600;
+      font-size: 1.03em;
+      color: #4483a1;
+    }
+    input, textarea {
+      width: 100%;
+      margin-top: 7px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #D1E3F0;
+      font-size: 1em;
+      background: #F8FCFF;
+      color: #222;
+      outline: none;
+      transition: border-color .18s, box-shadow .18s;
+      box-sizing: border-box;
+    }
+    input:focus, textarea:focus { border-color: var(--main); box-shadow: 0 2px 10px #b0e3ff30; }
+    textarea { min-height: 46px; }
+    .links-list .link-row {
+      display: flex; gap: 7px; margin: 11px 0;
+    }
+    .remove-btn {
+      background: #F06292;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 6px 8px 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background .18s;
+    }
+    .remove-btn:hover { background: #CE255C; }
+    .btn {
+      margin-top: 22px;
+      padding: 12px;
+      background: var(--main);
+      border: none;
+      border-radius: 9px;
+      font-size: 1.07em;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background .20s, box-shadow .18s;
+      box-shadow: 0 1.5px 8px #4FC3F770;
+      outline: none;
+    }
+    .btn:hover {
+      background: #2979FF;
+      box-shadow: 0 2px 12px #2979FF50;
+    }
+    .output {
+      margin-top: 24px;
+      background: #F2F8FF;
+      border: 1.5px solid #BFE3FF;
+      padding: 14px;
+      color: #0084ff;
+      font-family: monospace;
+      min-height: 60px;
+      word-break: break-all;
+      font-size: .95em;
+      border-radius: 8px;
+      user-select: all;
+      transition: background .2s;
+    }
+    .preview-label {
+      color: #8BBEDD;
+      font-size: .98em;
+      font-weight: 600;
+      margin-bottom: 13px;
+    }
+    @media (max-width:900px) {
+      .main { flex-direction: column; align-items: center; }
+      .panel { min-width: 94vw; max-width: 94vw; }
+    }
+    /* 优化预览风格 */
+    .preview-panel .card {
+      background: #FFFFFFEE;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 38px 22px 22px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      margin: 0 auto;
+      border: 1px solid #E3EFFA;
+      animation: fadein .4s;
+    }
+    @keyframes fadein { from{opacity:.5;transform:scale(.98)} to{opacity:1;transform:scale(1)} }
+    .preview-panel .avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      border: 3px solid var(--main);
+      background: #fff;
+      object-fit: cover;
+      box-shadow: 0 0 14px #4FC3F740;
+      transition: border-color .25s, box-shadow .22s;
+      animation: pop .45s;
+    }
+    @keyframes pop { from{transform:scale(.86)} to{transform:scale(1)} }
+    .preview-panel .name {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 7px;
+      color: #2071A9;
+      letter-spacing: .5px;
+      text-shadow: 0 1px 7px #55C8FF30;
+      transition: color .2s;
+    }
+    .preview-panel .desc {
+      font-size: 1.05rem;
+      color: #7BA6CC;
+      margin-bottom: 17px;
+      line-height: 1.5;
+    }
+    .preview-panel .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+      animation: fadein .36s;
+    }
+    .preview-panel .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(96deg, #4FC3F7 0%, #2979FF 100%);
+      color: #fff;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      font-size: 1.02rem;
+      font-weight: 500;
+      padding: 9px 0;
+      box-shadow: 0 2px 8px #4FC3F750;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.96;
+      letter-spacing: .3px;
+      transition: background .18s, box-shadow .18s, transform .13s;
+    }
+    .preview-panel .link-btn:hover, .preview-panel .link-btn:focus {
+      background: linear-gradient(90deg, #7BDBFF 0%, #2979FF 90%);
+      box-shadow: 0 6px 22px #2979FF55;
+      transform: scale(1.04);
+      opacity: 1;
+    }
+    .preview-panel .icon {
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(0 1px 6px #009BB830);
+      border-radius: 3px;
+      background: #fff;
+      transition: box-shadow .2s;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="panel">
+      <h2 style="margin-top:0;color:#4FC3F7;">管理后台</h2>
+      <label>头像URL</label>
+      <input id="avatar" type="text" value="https://avatars.githubusercontent.com/u/583231" oninput="updatePreview()"/>
+      <label>昵称</label>
+      <input id="name" type="text" value="你的昵称" oninput="updatePreview()"/>
+      <label>简介</label>
+      <textarea id="desc" oninput="updatePreview()">这是你的简介，可以介绍自己、兴趣、职业等</textarea>
+      <label>个人链接（可增删）</label>
+      <div class="links-list" id="links-list"></div>
+      <button class="btn" onclick="addLink()">添加一条链接</button>
+      <button class="btn" style="background:#2979FF;margin-left:10px;" onclick="generate()">生成前台页面源码</button>
+      <div class="output" id="output"></div>
+    </div>
+    <div class="panel preview-panel">
+      <div class="preview-label">实时预览</div>
+      <div id="preview"></div>
+    </div>
+  </div>
+  <script>
+    const linkIcons = {
+      "QQ": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tencentqq.svg",
+      "B站": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bilibili.svg",
+      "微博": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/sinaweibo.svg",
+      "微信": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/wechat.svg",
+      "Twitter": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg",
+      "Instagram": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg",
+      "Github": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg"
+    };
+    let links = [
+      {label:"QQ好友",url:"https://qq.com/",icon:"QQ"},
+      {label:"B站主页",url:"https://bilibili.com/",icon:"B站"},
+      {label:"微博",url:"https://weibo.com/",icon:"微博"},
+      {label:"微信",url:"https://wx.com/",icon:"微信"}
+    ];
+    function renderLinks() {
+      const list = document.getElementById('links-list');
+      list.innerHTML = '';
+      links.forEach((l,i)=> {
+        list.innerHTML += `
+          <div class="link-row">
+            <input type="text" value="${l.label}" placeholder="名称" onchange="links[${i}].label=this.value;updatePreview()"/>
+            <input type="text" value="${l.url}" placeholder="跳转地址" onchange="links[${i}].url=this.value;updatePreview()"/>
+            <select onchange="links[${i}].icon=this.value;updatePreview()">
+              ${Object.keys(linkIcons).map(icon=>`<option value="${icon}" ${icon===l.icon?"selected":""}>${icon}</option>`).join('')}
+            </select>
+            <button class="remove-btn" onclick="removeLink(${i})">删</button>
+          </div>
+        `;
+      });
+    }
+    function addLink() {
+      links.push({label:"名称",url:"",icon:"QQ"});
+      renderLinks(); updatePreview();
+    }
+    function removeLink(idx) {
+      links.splice(idx,1);
+      renderLinks(); updatePreview();
+    }
+    function generate() {
+      const avatar = document.getElementById("avatar").value;
+      const name = document.getElementById("name").value;
+      const desc = document.getElementById("desc").value;
+      const linksHtml = links.map(l=>`
+        <a class="link-btn" href="${l.url}" target="_blank">
+          <img class="icon" src="${linkIcons[l.icon]||''}" alt="${l.icon}" />
+          ${l.label}
+        </a>
+      `).join("\n      ");
+      const html = `<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>个人引导页</title>
+  <style>
+    :root {
+      --main: #4FC3F7;
+      --bg: #F5FAFF;
+      --card-bg: #FFFFFF;
+      --shadow: 0 6px 24px #91AAC04D;
+      --border: #E3EFFA;
+    }
+    html, body { background:var(--bg); color:#222; font-family:'Inter','Segoe UI',Arial,sans-serif; margin:0; min-height:100vh; }
+    body { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .card {
+      background:#FFFFFFEE;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:38px 22px 22px;
+      max-width:400px;
+      width:100%;
+      text-align:center;
+      margin:44px auto 0;
+      border:1px solid #E3EFFA;
+      animation:fadein .4s;
+    }
+    @keyframes fadein { from{opacity:.5;transform:scale(.98)} to{opacity:1;transform:scale(1)} }
+    .avatar {
+      width:92px;height:92px;border-radius:50%;margin-bottom:16px;border:3px solid var(--main);background:#fff;object-fit:cover;
+      box-shadow:0 0 14px #4FC3F740;transition:border-color .25s,box-shadow .22s;animation:pop .45s;
+    }
+    @keyframes pop { from{transform:scale(.86)} to{transform:scale(1)} }
+    .name {
+      font-size:1.35rem;font-weight:700;margin-bottom:7px;color:#2071A9;letter-spacing:.5px;text-shadow:0 1px 7px #55C8FF30;
+      transition:color .2s;
+    }
+    .desc {
+      font-size:1.05rem;color:#7BA6CC;margin-bottom:17px;line-height:1.5;
+    }
+    .links {
+      display:flex;flex-direction:column;gap:12px;margin-top:15px;animation;justify-content:center;gap:10px;
+      background:linear-gradient(96deg,#4FC3F7 0%,#2979FF 100%);
+      color:#fff;border:none;outline:none;border-radius:8px;font-size:1.02rem;font-weight:500;
+      padding:9px 0;box-shadow:0 2px 8px #4FC3F750;text-decoration:none;cursor:pointer;opacity:.96;letter-spacing:.3px;
+      transition:background .18s,box-shadow .18s,transform .13s;
+    }
+    .link-btn:hover,.link-btn:focus{
+      background:linear-gradient(90deg,#7BDBFF 0%,#2979FF 90%);
+      box-shadow:0 6px 22px #2979FF55;
+      transform:scale(1.04);
+      opacity:1;
+    }
+    .icon{
+      width:22px;height:22px;filter:drop-shadow(0 1px 6px #009BB830);border-radius:3px;background:#fff;transition:box-shadow .2s;
+    }
+    @media (max-width:540px){
+      .card{padding:16px 6px;margin-top:18px;}
+      .avatar{width:62px;height:62px;}
+      .name{font-size:1.08rem;}
+      .desc{font-size:0.92rem;}
+      .links{gap:8px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="${avatar}" alt="头像" class="avatar"/>
+    <div class="name">${name}</divbody>
+</html>`;
+      document.getElementById("output").textContent = html;
+    }
+    // 实时预览
+    function updatePreview() {
+      const avatar = document.getElementById("avatar").value;
+      const name = document.getElementById("name").value;
+      const desc = document.getElementById("desc").value;
+      const linksHtml = links.map(l=>`
+        <a class="link-btn" href="${l.url}" target="_blank">
+          <img class="icon" src="${linkIcons[l.icon]||''}" alt="${l.icon}" />
+          ${l.label}
+        </a>
+      `).join("");
+      document.getElementById("preview").innerHTML = `
+        <div class="card">
+          <img src="${avatar}" alt="头像" class="avatar"/>
+          <div class="name">${name}</div>
+          <div class="desc">${desc}</div>
+          <div class="links">
+            ${linksHtml}
+          </div>
+        </div>
+      `;
+    }
+    renderLinks();
+    updatePreview();
+  </script>
+</body>
+</html>
